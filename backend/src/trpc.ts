@@ -16,7 +16,7 @@ const travelIdeas = [
   {
     id: 3,
     name: 'Страница места (Destination Details)',
-    description:
+    description: 
       'Фото места (можно карусель).Название, описание, интересные факты. Блок "Что посетить" (список достопримечательностей). Простая карта (можно встроить Google Maps или статичное изображение). Кнопка "Добавить в избранное" (работает через локальное состояние).',
   },
   {
@@ -53,3 +53,4 @@ export const router = t.router({
 export type AppRouter = typeof router
 // Экспортируем сам роутер для использования в Express
 export const trpcRouter = router
+
