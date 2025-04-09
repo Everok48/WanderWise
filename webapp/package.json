@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "types": "tsc --noEmit --project ./tsconfig.json && tsc --noEmit --project ./tsconfig.node.json",
     "prettify": "prettier --cache --write --log-level warn \"**/*.{js,jsx,ts,tsx,json,yml,yaml,scss,css,md}\" \"!**/{node_modules,dist}/**\""
   },
   "dependencies": {
