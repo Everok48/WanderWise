@@ -36,18 +36,17 @@ const travelIdeas = [
 const t = initTRPC.create()
 
 export const router = t.router({
-  getIdeas: t.procedure
-    .query(() => {
-      try {
-        console.log('[tRPC] getIdeas called')
-        const result = { travelIdeas }
-        console.log('[tRPC] returning:', result)
-        return result
-      } catch (error) {
-        console.error('[tRPC] error in getIdeas:', error)
-        throw error
-      }
-    }),
+  getIdeas: t.procedure.query(() => {
+    try {
+      console.log('[tRPC] getIdeas called')
+      const result = { travelIdeas }
+      console.log('[tRPC] returning:', result)
+      return result
+    } catch (error) {
+      console.error('[tRPC] error in getIdeas:', error)
+      throw error
+    }
+  }),
 })
 
 // Экспортируем тип роутера

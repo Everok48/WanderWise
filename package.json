@@ -1,5 +1,23 @@
 {
   "name": "wanderwise",
   "private": true,
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "scripts": {
+    "b": "pnpm --filter @wanderwise/backend",
+    "w": "pnpm --filter @wanderwise/webapp",
+    "dev": "pnpm --paralel dev",
+    "types": "concurrently 'pnpm b types' 'pnpm w types'",
+    "lint": "concurrently 'pnpm b lint' 'pnpm w lint'",
+    "prettify": "pnpm -r --parallel prettify"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "6.4.0",
+    "@typescript-eslint/parser": "6.4.0",
+    "concurrently": "^9.1.2",
+    "eslint": "8.57.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-config-react-app": "7.0.1",
+    "eslint-plugin-react": "7.33.2",
+    "eslint-plugin-react-hooks": "4.6.0"
+  }
 }

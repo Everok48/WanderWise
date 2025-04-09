@@ -8,19 +8,19 @@
     "@types/node": "^22.14.0",
     "esm": "^3.2.25",
     "glob": "^11.0.1",
-    "lru-cache": "^11.1.0",
-    "nodemon": "^3.1.9",
-    "prettier": "^3.5.3",
-    "rimraf": "^6.0.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "lru-cache": "^11.1.0"
   },
   "scripts": {
     "dev": "nodemon --exec ts-node src/index.ts",
     "build": "rimraf ./dist && tsc --build ./tsconfig.json",
     "start": "node ./dist/index.js",
     "types": "tsc --noEmit --project ./tsconfig.json",
-    "prettify": "prettier --cache --write --log-level warn \"**/*.{js,jsx,ts,tsx,json,yml,yaml,scss,css,md}\" \"!**/{node_modules,dist}/**\""
+    "prettify": "prettier --cache --write --log-level warn \"**/*.{js,jsx,ts,tsx,json,yml,yaml,scss,css,md}\" \"!**/{node_modules,dist}/**\"",
+        "nodemon": "^3.1.9",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "@trpc/server": "^11.0.3",
