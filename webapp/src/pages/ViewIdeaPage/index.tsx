@@ -1,8 +1,24 @@
 import { useParams } from 'react-router-dom'
 import { type ViewIdeaRouteParams } from '../../lib/routes'
+import { trpc } from '../../lib/trpc-config'
 
 export const ViewIdeaPage = () => {
   const { travelIdeas } = useParams() as ViewIdeaRouteParams
+  const { data, error, isLoading, isFetching, isError } = trpc.getIdea.useQuery({
+    id: travelIdeas
+  })
+
+  if (isLoading || isFetching) {
+    return <span>Loading...</span>
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>
+  }
+
+  if (!data || !data.idea) {
+    return <span>Idea not found</span>
+  }
   return (
     <div>
       <h1>{travelIdeas}</h1>{/* Поиск */}

@@ -16,7 +16,7 @@
     "start": "node ./dist/index.js",
     "types": "tsc --noEmit --project ./tsconfig.json",
     "prettify": "prettier --cache --write --log-level warn \"**/*.{js,jsx,ts,tsx,json,yml,yaml,scss,css,md}\" \"!**/{node_modules,dist}/**\"",
-        "nodemon": "^3.1.9",
+    "nodemon": "^3.1.9",
     "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
@@ -25,6 +25,7 @@
   "dependencies": {
     "@trpc/server": "^11.0.3",
     "cors": "^2.8.5",
-    "express": "^4.18.3"
+    "express": "^4.18.3",
+    "zod": "^3.24.2"
   }
 }
