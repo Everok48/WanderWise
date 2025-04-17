@@ -1,0 +1,25 @@
+@use '../../styles/_vars.scss' as vars;
+@use '../../styles/_mixins.scss' as mixins;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 20px;
+  text-align: center;
+}
+
+.title {
+  @include mixins.h1;
+  color: vars.$blue;
+  margin-bottom: 20px;
+}
+
+.description {
+  font-size: 18px;
+  line-height: 1.6;
+  max-width: 600px;
+  color: vars.$black;
+} 

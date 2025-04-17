@@ -1,56 +1,72 @@
-import { initTRPC } from '@trpc/server'
-import { z } from 'zod'
+import { initTRPC } from '@trpc/server';
+import { z } from 'zod';
+
+// Схемы для данных
+const AttractionSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+});
+
+const TravelIdeaSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  imageUrl: z.string().optional(),
+  facts: z.array(z.string()).optional(),
+  attractions: z.array(AttractionSchema).optional(),
+});
 
 const travelIdeas = [
   {
     id: '1',
-    name: 'Главная страница (Home / Landing Page)',
+    name: 'Главная страница',
     description:
-      'Красивый герой-баннер с названием проекта и кратким описанием (например, "Планируй путешествия легко!").Кнопка CTA ("Начать планирование" → ведет на страницу поиска).Блок с преимуществами сервиса (3-4 карточки с иконками).Простой слайдер с популярными направлениями (можно статичные картинки + текст).',
+      'Логотип, название проекта и краткое описание. Кнопка("Начать планирование" → ведет на страницу поиска). Блок с преимуществами сервиса (3-4 карточки с иконками). Простой слайдер с популярными направлениями (можно статичные картинки + текст).',
   },
   {
     id: '2',
-    name: 'Поиск направлений (Explore / Search)',
+    name: 'Поиск направлений',
     description:
-      'Поле ввода для поиска (можно без бэкенда, просто фильтрация моковых данных).Карточки стран/городов (фото, название, краткое описание).Фильтры (например, "Пляжный отдых", "Горные походы", "Городские туры").При клике на карточку – переход на страницу места.',
+      'Поле ввода для поиска. Карточки стран/городов (фото, название, краткое описание). Фильтры (например, "Пляжный отдых", "Горные походы", "Городские туры"). При клике на карточку – переход на страницу места.',
   },
   {
     id: '3',
-    name: 'Страница места (Destination Details)',
-    description: 
-      'Фото места (можно карусель).Название, описание, интересные факты. Блок "Что посетить" (список достопримечательностей). Простая карта (можно встроить Google Maps или статичное изображение). Кнопка "Добавить в избранное" (работает через локальное состояние).',
+    name: 'Популярные направления',
+    description:
+      'Фото места. Название, описание, интересные факты. Блок "Что посетить" (список достопримечательностей). Простая карта. Кнопка "Добавить в избранное".',
+    imageUrl: 'https://example.com/image3.jpg',
+    facts: ['Факт 1', 'Факт 2'],
+    attractions: [
+      { name: 'Достопримечательность 1', description: 'Описание 1' },
+      { name: 'Достопримечательность 2', description: 'Описание 2' },
+    ],
   },
   {
     id: '4',
-    name: 'Избранное (Favorites / Saved)',
+    name: 'Избранное',
     description:
-      'Список сохраненных мест (из LocalStorage или состояния). Возможность удалять элементы. Если список пуст – сообщение "Здесь пока ничего нет" + кнопка перехода в Explore.',
+      'Список сохраненных мест. Возможность удалять элементы. Если список пуст – сообщение "Здесь пока ничего нет" + кнопка перехода в Поиск.',
   },
   {
     id: '5',
     name: 'О проекте (About / Contacts)',
     description:
-      'Информация о проекте (например, "WanderWise создан для удобного планирования путешествий"). Форма обратной связи (без бэкенда, просто имитация отправки). Ссылки на соцсети (можно просто иконки).',
+      'Инformation о проекте (например, "WanderWise создан для удобного планирования путешествий"). Ссылки на соцсети, иконки.',
   },
-]
+];
 
-const t = initTRPC.create()
+const t = initTRPC.create();
 
 export const router = t.router({
-  getAllIdeas: t.procedure
-    .query(() => {
-      return { travelIdeas }
-    }),
-    
+  getAllIdeas: t.procedure.query(() => {
+    return { travelIdeas: travelIdeas.map((idea) => TravelIdeaSchema.parse(idea)) };
+  }),
+
   getIdea: t.procedure
-    .input(
-      z.object({
-        id: z.string(),
-      })
-    )
+    .input(z.object({ id: z.string().nonempty() }))
     .query(({ input }) => {
-      const idea = travelIdeas.find((idea) => idea.id === input.id)
-      return { idea: idea || null }
+      const idea = travelIdeas.find((idea) => idea.id === input.id);
+      return { idea: idea ? TravelIdeaSchema.parse(idea) : null };
     }),
 
   searchIdeas: t.procedure
@@ -61,19 +77,26 @@ export const router = t.router({
       })
     )
     .query(({ input }) => {
-      const { query, limit } = input
+      const { query, limit } = input;
       const filteredIdeas = travelIdeas.filter(
-        (idea) => 
+        (idea) =>
           idea.name.toLowerCase().includes(query.toLowerCase()) ||
           idea.description.toLowerCase().includes(query.toLowerCase())
-      )
-      return { 
-        ideas: limit ? filteredIdeas.slice(0, limit) : filteredIdeas 
-      }
-    })
-})
+      );
+      return {
+        ideas: (limit ? filteredIdeas.slice(0, limit) : filteredIdeas).map((idea) =>
+          TravelIdeaSchema.parse(idea)
+        ),
+      };
+    }),
 
-// Экспортируем тип роутера
-export type TrpcRouter = typeof router
-// Экспортируем сам роутер для использования в Express
-export const trpcRouter = router
+  getDestinationDetails: t.procedure
+    .input(z.object({ id: z.string().nonempty() }))
+    .query(({ input }) => {
+      const destination = travelIdeas.find((idea) => idea.id === input.id);
+      return destination ? TravelIdeaSchema.parse(destination) : null;
+    }),
+});
+
+export type TrpcRouter = typeof router;
+export const trpcRouter = router;

@@ -1,0 +1,48 @@
+@use '../../styles/_vars.scss' as vars;
+@use '../../styles/_mixins.scss' as mixins;
+
+.ideas {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.search {
+  margin-bottom: 30px;
+
+  input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid vars.$black;
+    border-radius: 4px;
+  }
+}
+
+.idea {
+  padding: 20px;
+  border: 1px solid vars.$black;
+  border-radius: 10px;
+  margin-bottom: 20px;
+
+  .ideaName {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+
+    .ideaLink {
+      @include mixins.link;
+    }
+  }
+
+  .ideaDescription {
+    font-size: 18px;
+    line-height: 1.6;
+  }
+}

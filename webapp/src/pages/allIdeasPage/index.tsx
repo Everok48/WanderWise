@@ -1,7 +1,8 @@
 import { trpc } from '../../lib/trpc-config'
 import { Link } from 'react-router-dom'
-import { getViewIdeaRoute } from '../../lib/routes'
+import { getViewIdeaRoute, getDestinationDetailsPageRoute } from '../../lib/routes'
 import { useState } from 'react'
+import css from './index.module.scss'
 
 interface Idea {
   id: string;
@@ -34,23 +35,36 @@ export const AllIdeasPage = () => {
     return <span>No data available</span>
   }
 
+  const getLinkPath = (idea: Idea) => {
+    switch (idea.id) {
+      case '2': // Поиск направлений
+        return getViewIdeaRoute({ travelIdeas: idea.id })
+      case '3': // Популярные направления
+        return getDestinationDetailsPageRoute({ id: idea.id })
+      default:
+        return '/under-construction'
+    }
+  }
+
   return (
-    <div>
-      <h1>Путешествуйте мудро</h1>
-      <div>
+    <div className={css.ideas}>
+      <h1 className={css.title}>Путешествуйте мудро</h1>
+      <div className={css.search}>
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Поиск идей..."
+          placeholder="Место, ради которого стоит собирать чемодан..."
         />
       </div>
       {ideas.map((idea: Idea) => (
-        <div key={idea.id}>
-          <h2>
-            <Link to={getViewIdeaRoute({ travelIdeas: idea.id })}>{idea.name}</Link>
+        <div className={css.idea} key={idea.id}>
+          <h2 className={css.ideaName}>
+            <Link className={css.ideaLink} to={getLinkPath(idea)}>
+              {idea.name}
+            </Link>
           </h2>
-          <p>{idea.description}</p>
+          <p className={css.ideaDescription}>{idea.description}</p>
         </div>
       ))}
     </div>
