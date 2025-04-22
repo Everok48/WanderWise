@@ -5,19 +5,20 @@ import { useState } from 'react'
 import css from './index.module.scss'
 
 interface Idea {
-  id: string;
-  name: string;
-  description: string;
+  id: string
+  name: string
+  description: string
 }
 
 export const AllIdeasPage = () => {
   const [searchQuery, setSearchQuery] = useState('')
-  
+
   const { data: allData, error: allError, isLoading: allLoading } = trpc.getAllIdeas.useQuery()
-  const { data: searchData, error: searchError, isLoading: searchLoading } = trpc.searchIdeas.useQuery(
-    { query: searchQuery, limit: 5 },
-    { enabled: searchQuery.length > 0 }
-  )
+  const {
+    data: searchData,
+    error: searchError,
+    isLoading: searchLoading,
+  } = trpc.searchIdeas.useQuery({ query: searchQuery, limit: 5 }, { enabled: searchQuery.length > 0 })
 
   const ideas = searchQuery ? searchData?.ideas : allData?.travelIdeas
   const isLoading = allLoading || searchLoading
